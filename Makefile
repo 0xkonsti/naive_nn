@@ -37,11 +37,11 @@ format:
 
 .PHONY: run-debug
 run-debug: debug
-	@cd $(BUILD_DIR) && ./run
+	@cd $(BUILD_DIR) && ./main
 
 .PHONY: run-release
 run-release: release
-	@cd $(BUILD_DIR) && ./run
+	@cd $(BUILD_DIR) && ./main
 
 # Build the project\
 
