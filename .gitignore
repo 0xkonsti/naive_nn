@@ -61,5 +61,6 @@ out/
 CMakeFiles/
 cmake-build*/
 .cache/
+compile_commands.json
 
 
