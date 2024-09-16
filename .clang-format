@@ -7,4 +7,4 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 QualifierAlignment: Right
 IncludeBlocks: Merge
-# InsertNewlineAtEOF: true
+InsertNewlineAtEOF: true
