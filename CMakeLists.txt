@@ -14,6 +14,8 @@ include_directories(include)
 
 add_library(naive_nn STATIC ${SOURCES} ${HEADERS})
 
+target_link_libraries(naive_nn m)
+
 add_executable(main test/main.c)
 
 target_link_libraries(main naive_nn)
