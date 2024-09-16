@@ -1,5 +1,4 @@
 #include "NNN/loss.h"
-#include <math.h>
 
 double __mse_function(double const predicted, double const actual) {
     return (predicted - actual) * (predicted - actual);
