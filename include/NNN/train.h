@@ -13,14 +13,14 @@ NN_TrainingPair* nn_create_training_pair(double* input, double* target);
 void nn_destroy_training_pair(NN_TrainingPair* pair);
 
 typedef struct {
-    NN_TrainingPair* pairs;
+    NN_TrainingPair** pairs;
     int num_pairs;
 } NN_TrainingSet;
 
 NN_TrainingSet* nn_create_training_set(void);
 void nn_destroy_training_set(NN_TrainingSet* set);
 
-void nn_add_pair(NN_TrainingSet* set, NN_TrainingPair const* pair);
+void nn_add_pair(NN_TrainingSet* set, NN_TrainingPair* pair);
 
 typedef struct {
     NN_Loss const* loss;

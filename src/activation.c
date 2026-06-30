@@ -6,6 +6,7 @@ double __sigmoid(double const x) {
 }
 
 double __sigmoid_derivative(double const x) {
+    // x is post-activation: sigmoid'(z) = sigmoid(z) * (1 - sigmoid(z))
     return x * (1.0 - x);
 }
 
@@ -32,6 +33,7 @@ double __tanh(double const x) {
 }
 
 double __tanh_derivative(double const x) {
+    // x is post-activation: tanh'(z) = 1 - tanh^2(z)
     return 1 - x * x;
 }
 
@@ -58,7 +60,8 @@ double __input(double const x) {
 }
 
 double __input_derivative(double const x) {
-    return x;
+    (void)x;
+    return 1;
 }
 
 NN_Activation const NN_INPUT = {

@@ -23,20 +23,23 @@ NN_TrainingSet* nn_create_training_set(void) {
 
 void nn_destroy_training_set(NN_TrainingSet* set) {
     for (int i = 0; i < set->num_pairs; i++) {
-        nn_destroy_training_pair(&set->pairs[i]);
+        nn_destroy_training_pair(set->pairs[i]);
     }
 
     free(set->pairs);
     free(set);
 }
 
-void nn_add_pair(NN_TrainingSet* set, NN_TrainingPair const* pair) {
+void nn_add_pair(NN_TrainingSet* set, NN_TrainingPair* pair) {
     set->num_pairs++;
-    set->pairs = realloc(set->pairs, set->num_pairs * sizeof(NN_TrainingPair));
-    set->pairs[set->num_pairs - 1] = *pair;
+    set->pairs = realloc(set->pairs, set->num_pairs * sizeof(NN_TrainingPair*));
+    if (set->pairs == NULL) {
+        return;
+    }
+    set->pairs[set->num_pairs - 1] = pair;
 }
 
-void __single_pair(NN_Model const* model, NN_TrainingPair const* pair,
+void __single_pair(NN_Model const* model, NN_TrainingPair* pair,
                    double const learning_rate, NN_Loss const* loss) {
     nn_set_input(model, pair->input);
     nn_forward(model);
@@ -50,10 +53,11 @@ void nn_train(NN_Model const* model, NN_TrainConfig const* config) {
         printf("Epoch %010d / %010d :", epoch + 1, config->epochs);
         double avg_loss = 0.0;
         for (int i = 0; i < config->training_set->num_pairs; i++) {
-            __single_pair(model, &config->training_set->pairs[i],
+            __single_pair(model, config->training_set->pairs[i],
                           config->learning_rate, config->loss);
             avg_loss += config->loss->total(
-                model->output->neurons, config->training_set->pairs[i].target,
+                model->output->neurons,
+                config->training_set->pairs[i]->target,
                 model->output->neuron_count);
         }
         avg_loss /= config->training_set->num_pairs;

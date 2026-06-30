@@ -58,10 +58,12 @@ void __forward(NN_Layer const* layer) {
 }
 
 void __backward(NN_Layer const* layer, double const learning_rate) {
-    if (layer->prev == NULL || layer->weights == NULL) {
+    if (layer->prev == NULL || layer->next == NULL || layer->weights == NULL) {
         return;
     }
 
+    // dL/dz_i = sum_j(dL/dz_next_j * w_ij) * act'(z_i)
+    // weights[i][j] is the transpose of the forward index weights[j][i]
     for (uint32_t i = 0; i < layer->neuron_count; i++) {
         double sum = 0.0;
         for (uint32_t j = 0; j < layer->next->neuron_count; j++) {
@@ -72,6 +74,7 @@ void __backward(NN_Layer const* layer, double const learning_rate) {
             sum * layer->activation.derivative(layer->neurons[i]);
     }
 
+    // w_ij -= lr * dL/dz_next_j * a_i
     for (uint32_t i = 0; i < layer->neuron_count; i++) {
         for (uint32_t j = 0; j < layer->next->neuron_count; j++) {
             layer->weights->weights[i][j] -= layer->next->weight_gradients[j] *
@@ -134,6 +137,7 @@ void nn_destroy_layer(NN_Layer* layer) {
     if (layer->weights) {
         nn_destroy_weights(layer->weights);
     }
+    free(layer->weight_gradients);
     free(layer->biases);
     free(layer->neurons);
     free(layer);

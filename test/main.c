@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "NNN/nnn.h"
 #include "NNN/train.h"
 
 int main(void) {
+    srand((unsigned int)time(NULL));
     NN_Model* model = nn_create_model();
 
     nn_add_layer(
